@@ -8,6 +8,9 @@
 - name: "Delete ghost pod e deployment"
   shell: kubectl delete deployment --ignore-not-found=true ghost-deployment
 
+- name: "Delete ghost autoscale"
+  shell: kubectl delete hpa --ignore-not-found=true ghost-deployment  
+
 - name: "Delete database service"
   shell: kubectl delete service --ignore-not-found=true mysql-service
   when: delete_data is defined
@@ -15,6 +18,10 @@
 - name: "Delete database pod e deployment"
   shell: kubectl delete deployment --ignore-not-found=true mysql-deployment
   when: delete_data is defined
+
+- name: "wait about 60 to undeploy"
+  ansible.builtin.pause:
+    seconds: 10
 
 - name: "Check All"
   shell: kubectl get all
