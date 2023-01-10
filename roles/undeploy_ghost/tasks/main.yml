@@ -19,9 +19,9 @@
   shell: kubectl delete deployment --ignore-not-found=true mysql-deployment
   when: delete_data is defined
 
-- name: "wait about 60 to undeploy"
+- name: "wait about 30 to undeploy"
   ansible.builtin.pause:
-    seconds: 10
+    seconds: 30
 
 - name: "Check All"
   shell: kubectl get all
