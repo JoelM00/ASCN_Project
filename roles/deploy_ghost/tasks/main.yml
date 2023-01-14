@@ -188,9 +188,14 @@
                 - name: url
                   value: http://{{ghost_ip}}
 
-- name: "wait about 60 to pod to be ready"
-  ansible.builtin.pause:
-    seconds: 60
+#- name: "wait about 60 to pod to be ready"
+#  ansible.builtin.pause:
+#    seconds: 60
+
+- name: wait for pods to come up
+  shell: kubectl get pods -o json
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
 
 - name: "Check All"
   shell: kubectl get all
