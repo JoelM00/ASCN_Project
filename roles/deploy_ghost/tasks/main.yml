@@ -188,9 +188,9 @@
                 - name: url
                   value: http://{{ghost_ip}}
 
-#- name: "wait about 60 to pod to be ready"
-#  ansible.builtin.pause:
-#    seconds: 60
+- name: "wait about 60 to pod to be ready"
+  ansible.builtin.pause:
+    seconds: 60
 
 - name: wait for pods to come up
   shell: kubectl get pods -o json
@@ -218,4 +218,9 @@
   shell: kubectl exec -it {{mysql_pod}} -- mysql -u ghost_user --password=ghost_password ghost_database -e "update users set name='ascn', password='\$2b\$10\$KfnjJ4ovp72zYBkqRD9kyuVXeHpeXwI4sF/oYEdxt3AGXQVVsOi5a' , email='ascn@example.com' , status='active' where id=1"
 
 - name: "autoScale ghost"
-  shell: kubectl autoscale deployment ghost-deployment --min 1 --max 10 --cpu-percent 65
+  shell: kubectl autoscale deployment ghost-deployment --min {{as_min_pods}} --max {{as_max_pods}} --cpu-percent {{as_cpu_goal}}
+
+- name: Create gcloud monitoring dashboard
+  ansible.builtin.shell:
+    gcloud monitoring dashboards create --config-from-file=dashboard.json
+

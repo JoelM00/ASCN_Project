@@ -21,3 +21,9 @@ all:
 
   # Additional variables
   # ...
+  #Autoscale parameters
+  as_cpu_goal: 65
+  as_min_pods: 1
+  as_max_pods: 10
+
+
